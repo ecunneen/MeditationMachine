@@ -1,0 +1,22 @@
+(
+/*SynthDef(\sine0, { |amp = 0.5, freq = 440|
+	var data = SinOsc.ar(freq, 0, amp);
+	Out.ar(0, data ! 2);
+}).store;*/
+
+SynthDef(\sine0, { |carfreq = 200, modfreq = 100|
+var data = GrainFM.ar(1, Dust.kr(40, 1, 0), 0.2, carfreq, modfreq, 1, 0, -1, 512, 1, 0);
+Out.ar(0, data ! 2);
+}).store;
+
+SynthDef(\sine1, { |carfreq = 200, modfreq = 100|
+var data = GrainFM.ar(1, LFSaw.kr(20, 0, 1, 0), 0.2, carfreq, modfreq, 1, 0, -1, 512, 1, 0);
+Out.ar(0, data ! 2);
+}).store;
+
+SynthDef(\sine2, { |carfreq = 200, modfreq = 100|
+var data = GrainFM.ar(1, LFTri.kr(20, 0, 1, 0), 0.2, carfreq, modfreq, 1, 0, -1, 512, 1, 0);
+Out.ar(0, data ! 2);
+}).store;
+
+)
