@@ -1,0 +1,105 @@
+
+import supercollider.*;
+import oscP5.*;
+import netP5.*;
+import processing.serial.*;
+
+//STUFF FOR SERIAL
+int lf = 10;    // Linefeed in ASCII
+String myString = null;
+Serial myPort;  // Create object from Serial class
+int val;      // Data received from the serial port
+int sensor0 = 0;
+int sensor1 = 0;
+int sensor2 = 0;
+float valUseful0;
+float valUseful1;
+float valUseful2;
+
+//Names for synths ***IN SC***
+Synth synth0;
+Synth synth1;
+Synth synth2;
+
+
+
+void setup() 
+{
+  String portName = Serial.list()[5];
+  myPort = new Serial(this, portName, 9600);
+  myPort.clear();
+  // Throw out the first reading, in case we started reading 
+  // in the middle of a string from the sender.
+  myString = myPort.readStringUntil(lf);
+  myString = null;
+  
+  // uses default sc server at 127.0.0.1:57110    
+  // does NOT create synth!
+  synth0 = new Synth("sine0");
+  synth1 = new Synth("sine1");
+  synth2 = new Synth("sine2");
+  
+  // set initial arguments
+  synth0.set("amp", 0.5);
+  synth0.set("freq", 80);
+  
+  synth1.set("amp", 0.5);
+  synth1.set("freq", 80);
+  
+  synth2.set("amp", 0.5);
+  synth2.set("freq", 80);
+    
+  // create synth
+  synth0.create();
+  synth1.create();
+  synth2.create();
+}
+
+void draw()
+{
+  
+ synth0.set("freq", 40 + valUseful0);
+ synth1.set("freq", 40 + valUseful1);
+ synth2.set("freq", 40 + valUseful2);
+}
+
+void serialEvent(Serial myPort) {
+  // get the ASCII string:
+  String inString = myPort.readStringUntil('\n');
+ 
+  if (inString != null) {
+    // trim off any whitespace:
+    inString = trim(inString);
+    // split the string on the commas and convert the
+    // resulting substrings into an integer array:
+    int[] sensors = int(split(inString, ","));
+    // if the array has at least two elements, you know
+    // you got the whole thing.  Put the numbers in the
+    // sensor variables:
+    if (sensors.length >=3) {
+      sensor0 = sensors[0];
+      sensor1 = sensors[1];
+      sensor2 = sensors[2];
+      
+      println(sensor0); //small bowl
+      //println(sensor1); //big bowl
+      //println(sensor2); //triangle
+    }
+  }
+  valUseful0 = map(sensor0, 1000, 220000, 200, 1000);
+  valUseful1 = map(sensor1, 4000, 195000, 200, 1000);
+  valUseful2 = map(sensor2, 4000, 220000, 200, 1000);  
+   
+    
+    //println(valUseful0);
+    //println(valUseful1);
+    //println(valUseful2);
+}
+
+void exit ()
+{
+    synth0.free();
+    synth1.free();
+    synth2.free();
+    super.exit();
+}
