@@ -12,6 +12,8 @@ int val;      // Data received from the serial port
 int sensor0 = 0;
 int sensor1 = 0;
 int sensor2 = 0;
+
+//STUFF FOR SYNTHS
 float valUseful0;
 float valUseful1;
 float valUseful2;
@@ -40,14 +42,14 @@ void setup()
   synth2 = new Synth("sine2");
   
   // set initial arguments
-  synth0.set("amp", 0.5);
-  synth0.set("freq", 80);
+  synth0.set("carfreq", 200 );
+  synth0.set("modfreq", 200);
   
-  synth1.set("amp", 0.5);
-  synth1.set("freq", 80);
+  synth1.set("carfreq", 200 );
+  synth1.set("modfreq", 200);
   
-  synth2.set("amp", 0.5);
-  synth2.set("freq", 80);
+  synth2.set("carfreq", 200 );
+  synth2.set("modfreq", 200);
     
   // create synth
   synth0.create();
@@ -57,10 +59,14 @@ void setup()
 
 void draw()
 {
-  
- synth0.set("freq", 40 + valUseful0);
- synth1.set("freq", 40 + valUseful1);
- synth2.set("freq", 40 + valUseful2);
+ synth0.set("carfreq", 10 + valUseful0);
+ synth0.set("modfreq", 20 + valUseful0);
+ 
+ synth1.set("carfreq", 10 + valUseful1);
+ synth1.set("modfreq", 20 + valUseful1);
+ 
+ synth2.set("carfreq", 10 + valUseful2);
+ synth2.set("modfreq", 20 + valUseful2);
 }
 
 void serialEvent(Serial myPort) {
@@ -81,19 +87,19 @@ void serialEvent(Serial myPort) {
       sensor1 = sensors[1];
       sensor2 = sensors[2];
       
-      println(sensor0); //small bowl
+      //println(sensor0); //small bowl
       //println(sensor1); //big bowl
       //println(sensor2); //triangle
     }
   }
-  valUseful0 = map(sensor0, 1000, 220000, 200, 1000);
-  valUseful1 = map(sensor1, 4000, 195000, 200, 1000);
-  valUseful2 = map(sensor2, 4000, 220000, 200, 1000);  
+  valUseful0 = map(sensor0, 0, 8000, 200, 4000);
+  valUseful1 = map(sensor1, 0, 6000, 200, 10000);
+  valUseful2 = map(sensor2, 0, 7000, 200, 4000);  
    
     
     //println(valUseful0);
     //println(valUseful1);
-    //println(valUseful2);
+    println(valUseful2);
 }
 
 void exit ()
