@@ -1,0 +1,37 @@
+#include <CapacitiveSensor.h>
+
+/*
+ * CapitiveSense Library Demo Sketch
+ * Paul Badger 2008
+ * Uses a high value resistor e.g. 10M between send pin and receive pin
+ * Resistor effects sensitivity, experiment with values, 50K - 50M. Larger resistor values yield larger sensor values.
+ * Receive pin is the sensor pin - try different amounts of foil/metal on this pin
+ */
+
+CapacitiveSensor   cs_8_4 = CapacitiveSensor(8,4); 
+CapacitiveSensor   cs_8_10 = CapacitiveSensor(8,10);        
+CapacitiveSensor   cs_8_12 = CapacitiveSensor(8,12); 
+
+long total1, total2, total3;
+
+
+void setup()                    
+{
+   Serial.begin(9600);
+}
+
+void loop()                    
+{
+    total1 = cs_8_4.capacitiveSensor(30);
+    total2 = cs_8_10.capacitiveSensor(30);
+    total3 = cs_8_12.capacitiveSensor(30);
+    
+    Serial.print(total1);
+    Serial.print(",");
+    Serial.print(total2);
+    Serial.print(",");
+    Serial.println(total3);
+    
+
+    delay(10);  // arbitrary delay to limit data to serial port 
+}
